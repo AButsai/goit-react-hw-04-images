@@ -28,3 +28,7 @@
 .Button:focus {
   background-color: #303f9f;
 }
+
+.Hidden {
+  display: none;
+}
