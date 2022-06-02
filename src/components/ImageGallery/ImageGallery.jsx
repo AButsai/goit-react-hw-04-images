@@ -8,7 +8,7 @@ import Button from 'components/Button';
 import s from './ImageGallery.module.css';
 
 const ImageGallery = props => {
-  const { images, onClickButton, isButton } = props;
+  const { images, onClickButton } = props;
 
   const [showLoader, setShowLoader] = useState(false);
 
@@ -39,11 +39,7 @@ const ImageGallery = props => {
           ))
         )}
       </ul>
-      {showLoader ? (
-        <Button isButton={isButton} onClick={handleClickButton} />
-      ) : (
-        <Loader />
-      )}
+      {showLoader ? <Button onClick={handleClickButton} /> : <Loader />}
     </>
   );
 };

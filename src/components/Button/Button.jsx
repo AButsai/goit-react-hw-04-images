@@ -2,13 +2,9 @@ import PropTypes from 'prop-types';
 import s from './Button.module.css';
 
 const Button = props => {
-  const { onClick, isButton } = props;
+  const { onClick } = props;
   return (
-    <button
-      className={isButton ? s.Button : s.Hidden}
-      type="button"
-      onClick={onClick}
-    >
+    <button className={s.Button} type="button" onClick={onClick}>
       Load more
     </button>
   );

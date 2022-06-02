@@ -3,7 +3,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import api from '../services/images-api.js';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
-import { PER_PAGE } from '../services/images-api.js';
 
 import s from './App.module.css';
 
@@ -11,7 +10,10 @@ const App = () => {
   const [dataImages, setDataImages] = useState([]);
   const [imagesTag, setImagesTag] = useState('');
   const [page, setPage] = useState(1);
-  const [isButton, setIsButton] = useState(true);
+
+  const upDadeDataImages = data => {
+    setDataImages([...dataImages, data]);
+  };
 
   useEffect(() => {
     if (imagesTag === '') {
@@ -21,9 +23,6 @@ const App = () => {
     api
       .fetchImages(imagesTag, page)
       .then(response => {
-        if (dataImages.length * PER_PAGE > response.data.totalHits) {
-          setIsButton(false);
-        }
         if (response.data.total !== 0) {
           return response.data;
         }
@@ -31,7 +30,7 @@ const App = () => {
           new Error(`Нет картинок с названием ${imagesTag}`)
         );
       })
-      .then(data => setDataImages([...dataImages, data]))
+      .then(data => upDadeDataImages(data))
       .catch(error => {
         toast.error(error.message);
       });
@@ -41,7 +40,6 @@ const App = () => {
     setImagesTag(imagesTag);
     setPage(1);
     setDataImages([]);
-    setIsButton(true);
   };
 
   const handleButtonClick = () => {
@@ -52,13 +50,8 @@ const App = () => {
     <div className={s.App}>
       <Searchbar onSubmit={handleSubmitForm} />
       {dataImages.length !== 0 && (
-        <ImageGallery
-          images={dataImages}
-          onClickButton={handleButtonClick}
-          isButton={isButton}
-        />
+        <ImageGallery images={dataImages} onClickButton={handleButtonClick} />
       )}
-
       <ToastContainer autoClose={1500} />
     </div>
   );
