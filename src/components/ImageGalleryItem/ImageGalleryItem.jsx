@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'components/Modal';
 import s from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = props => {
-  const { webformatURL, largeImageURL, tags } = props;
-
+const ImageGalleryItem = ({ webformatURL, largeImageURL, tags }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleToggleModal = () => {

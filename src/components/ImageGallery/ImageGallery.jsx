@@ -1,29 +1,10 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-
 import ImageGalleryItem from '../ImageGalleryItem';
-import Loader from 'components/Loader';
-import Button from 'components/Button';
 
 import s from './ImageGallery.module.css';
 
-const ImageGallery = ({ images, onClickButton }) => {
-  const [showLoader, setShowLoader] = useState(false);
-
-  const handleToggleLoader = () => {
-    setShowLoader(!showLoader);
-  };
-
-  useEffect(() => {
-    handleToggleLoader();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images]);
-
-  function handleClickButton() {
-    handleToggleLoader();
-    onClickButton();
-  }
-
+const ImageGallery = ({ images, children }) => {
   return (
     <>
       <ul className={s.ImageGallery}>
@@ -38,12 +19,13 @@ const ImageGallery = ({ images, onClickButton }) => {
           ))
         )}
       </ul>
-      {showLoader ? <Button onClick={handleClickButton} /> : <Loader />}
+      {children}
     </>
   );
 };
 
 ImageGallery.propTypes = {
+  children: PropTypes.element,
   hits: PropTypes.shape({
     id: PropTypes.number.isRequired,
     webformatURL: PropTypes.string.isRequired,

@@ -15,7 +15,7 @@ const fetchImages = (name, page) => {
         if (response.data.total !== 0) {
           return response.data;
         }
-        return Promise.reject(new Error(`Нет картинок с названием ${name}`));
+        return Promise.reject(new Error(`${name}`));
       });
   } catch (error) {
     console.error(error);
