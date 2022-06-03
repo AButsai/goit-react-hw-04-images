@@ -1,53 +1,107 @@
-import { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import api from '../services/images-api.js';
+import React, { useState, useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import api from '../services/imagesApi.js';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
+import Button from './Button';
+import Loader from './Loader';
 
 import s from './App.module.css';
 
-const App = () => {
+const Status = {
+  IDLE: 'idle',
+  PENDING: 'pending',
+  RESOLVED: 'resolved',
+  REJECTED: 'rejected',
+};
+
+function App() {
   const [dataImages, setDataImages] = useState([]);
-  const [query, setQuery] = useState('');
+  const [imagesName, setImagesName] = useState('');
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState(Status.IDLE);
+  const [errors, setErrors] = useState(null);
 
   useEffect(() => {
-    if (query === '') {
+    if (imagesName === '') {
       return;
     }
 
+    setStatus(Status.PENDING);
+
     api
-      .fetchImages(query, page)
+      .fetchImages(imagesName, page)
       .then(data => {
-        setDataImages(() => {
-          return [...dataImages, data];
-        });
+        setDataImages([...dataImages, data]);
+        setStatus(Status.RESOLVED);
       })
       .catch(error => {
-        toast.error(error.message);
+        setErrors(error);
+        setStatus(Status.REJECTED);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, page]);
+  }, [imagesName, page]);
 
-  const handleSubmitForm = query => {
-    setQuery(query);
+  const handleSubmitForm = imagesName => {
+    setImagesName(imagesName);
     setPage(1);
     setDataImages([]);
+    setErrors(null);
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = e => {
     setPage(prevState => prevState + 1);
   };
 
-  return (
-    <div className={s.App}>
-      <Searchbar onSubmit={handleSubmitForm} />
-      {dataImages.length !== 0 && (
-        <ImageGallery images={dataImages} onClickButton={handleButtonClick} />
-      )}
-      <ToastContainer autoClose={1500} />
-    </div>
-  );
-};
+  const searchBar = <Searchbar onSubmit={handleSubmitForm} />;
+  const toastContainer = <ToastContainer autoClose={1500} />;
+
+  if (status === Status.IDLE) {
+    return (
+      <div className={s.App}>
+        {searchBar}
+        {toastContainer}
+      </div>
+    );
+  }
+
+  if (status === Status.PENDING) {
+    return (
+      <div className={s.App}>
+        {searchBar}
+        {toastContainer}
+        {dataImages.length !== 0 && <ImageGallery images={dataImages} />}
+        <Loader />
+      </div>
+    );
+  }
+
+  if (status === Status.RESOLVED) {
+    return (
+      <div className={s.App}>
+        {searchBar}
+        {toastContainer}
+        <ImageGallery images={dataImages}>
+          <Button onClick={handleButtonClick} />
+        </ImageGallery>
+      </div>
+    );
+  }
+
+  if (status === Status.REJECTED) {
+    return (
+      <div className={s.App}>
+        {searchBar}
+        {toastContainer}
+        {errors && (
+          <p className={s.ErrorTitle}>
+            Нет картинок с названием <span>{errors.message}</span>, поробуйте
+            ввести другое название!
+          </p>
+        )}
+      </div>
+    );
+  }
+}
 
 export default App;
