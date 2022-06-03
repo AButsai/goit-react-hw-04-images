@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../services/images-api.js';
 import Searchbar from './Searchbar';
@@ -8,36 +8,29 @@ import s from './App.module.css';
 
 const App = () => {
   const [dataImages, setDataImages] = useState([]);
-  const [imagesTag, setImagesTag] = useState('');
+  const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
 
-  const upDadeDataImages = data => {
-    setDataImages([...dataImages, data]);
-  };
-
   useEffect(() => {
-    if (imagesTag === '') {
+    if (query === '') {
       return;
     }
 
     api
-      .fetchImages(imagesTag, page)
-      .then(response => {
-        if (response.data.total !== 0) {
-          return response.data;
-        }
-        return Promise.reject(
-          new Error(`Нет картинок с названием ${imagesTag}`)
-        );
+      .fetchImages(query, page)
+      .then(data => {
+        setDataImages(() => {
+          return [...dataImages, data];
+        });
       })
-      .then(data => upDadeDataImages(data))
       .catch(error => {
         toast.error(error.message);
       });
-  }, [imagesTag, page]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, page]);
 
-  const handleSubmitForm = imagesTag => {
-    setImagesTag(imagesTag);
+  const handleSubmitForm = query => {
+    setQuery(query);
     setPage(1);
     setDataImages([]);
   };

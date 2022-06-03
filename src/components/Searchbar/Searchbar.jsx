@@ -3,27 +3,25 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import s from './Searchbar.module.css';
 
-const Searchbar = props => {
-  const { onSubmit } = props;
-
-  const [tag, setTag] = useState('');
+const Searchbar = ({ onSubmit }) => {
+  const [query, setQuery] = useState('');
 
   const handleChange = e => {
     const { value } = e.currentTarget;
 
-    setTag(value.toLowerCase());
+    setQuery(value.toLowerCase());
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (tag.trim() === '') {
+    if (query.trim() === '') {
       toast('Enter image name');
       return;
     }
 
-    onSubmit(tag);
-    setTag('');
+    onSubmit(query);
+    setQuery('');
   };
 
   return (
@@ -39,7 +37,7 @@ const Searchbar = props => {
           autocomplete="off"
           autofocus
           placeholder="Search images and photos"
-          value={tag}
+          value={query}
           onChange={handleChange}
         />
       </form>
