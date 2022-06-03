@@ -7,18 +7,17 @@ import Button from 'components/Button';
 
 import s from './ImageGallery.module.css';
 
-const ImageGallery = props => {
-  const { images, onClickButton } = props;
-
+const ImageGallery = ({ images, onClickButton }) => {
   const [showLoader, setShowLoader] = useState(false);
+
+  const handleToggleLoader = () => {
+    setShowLoader(!showLoader);
+  };
 
   useEffect(() => {
     handleToggleLoader();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images]);
-
-  function handleToggleLoader() {
-    setShowLoader(!showLoader);
-  }
 
   function handleClickButton() {
     handleToggleLoader();
