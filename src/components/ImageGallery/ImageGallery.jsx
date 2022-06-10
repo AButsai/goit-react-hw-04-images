@@ -8,8 +8,8 @@ const ImageGallery = ({ images, children }) => {
   return (
     <>
       <ul className={s.ImageGallery}>
-        {images.map(({ hits }) =>
-          hits.map(({ id, webformatURL, largeImageURL, tags }) => (
+        {images.map(images =>
+          images.map(({ id, webformatURL, largeImageURL, tags }) => (
             <ImageGalleryItem
               key={id}
               webformatURL={webformatURL}
@@ -19,6 +19,7 @@ const ImageGallery = ({ images, children }) => {
           ))
         )}
       </ul>
+
       {children}
     </>
   );
