@@ -52,22 +52,19 @@ function App() {
     setPage(prevState => prevState + 1);
   };
 
-  const searchBar = <Searchbar onSubmit={handleSubmitForm} />;
-  const toastContainer = <ToastContainer autoClose={1500} />;
-
   return (
     <>
       {status === Status.IDLE && (
         <div className={s.App}>
-          {searchBar}
-          {toastContainer}
+          <Searchbar onSubmit={handleSubmitForm} />
+          <ToastContainer autoClose={1500} />
         </div>
       )}
 
       {status === Status.PENDING && (
         <div className={s.App}>
-          {searchBar}
-          {toastContainer}
+          <Searchbar onSubmit={handleSubmitForm} />
+          <ToastContainer autoClose={1500} />
           {dataImages.length !== 0 && <ImageGallery images={dataImages} />}
           <Loader />
         </div>
@@ -75,8 +72,8 @@ function App() {
 
       {status === Status.RESOLVED && (
         <div className={s.App}>
-          {searchBar}
-          {toastContainer}
+          <Searchbar onSubmit={handleSubmitForm} />
+          <ToastContainer autoClose={1500} />
           <ImageGallery images={dataImages}>
             <Button onClick={handleButtonClick} />
           </ImageGallery>
@@ -85,8 +82,8 @@ function App() {
 
       {status === Status.REJECTED && (
         <div className={s.App}>
-          {searchBar}
-          {toastContainer}
+          <Searchbar onSubmit={handleSubmitForm} />
+          <ToastContainer autoClose={1500} />
           {errors && (
             <p className={s.ErrorTitle}>
               Нет картинок с названием <span>{errors.message}</span>, поробуйте
