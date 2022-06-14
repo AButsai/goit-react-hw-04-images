@@ -54,44 +54,20 @@ function App() {
 
   return (
     <>
-      {status === Status.IDLE && (
-        <div className={s.App}>
-          <Searchbar onSubmit={handleSubmitForm} />
-          <ToastContainer autoClose={1500} />
-        </div>
-      )}
+      <Searchbar onSubmit={handleSubmitForm} />
+      <ToastContainer autoClose={1500} />
 
-      {status === Status.PENDING && (
-        <div className={s.App}>
-          <Searchbar onSubmit={handleSubmitForm} />
-          <ToastContainer autoClose={1500} />
-          {dataImages.length !== 0 && <ImageGallery images={dataImages} />}
-          <Loader />
-        </div>
-      )}
-
-      {status === Status.RESOLVED && (
-        <div className={s.App}>
-          <Searchbar onSubmit={handleSubmitForm} />
-          <ToastContainer autoClose={1500} />
-          <ImageGallery images={dataImages}>
-            <Button onClick={handleButtonClick} />
-          </ImageGallery>
-        </div>
-      )}
-
-      {status === Status.REJECTED && (
-        <div className={s.App}>
-          <Searchbar onSubmit={handleSubmitForm} />
-          <ToastContainer autoClose={1500} />
-          {errors && (
-            <p className={s.ErrorTitle}>
-              Нет картинок с названием <span>{errors.message}</span>, поробуйте
-              ввести другое название!
-            </p>
-          )}
-        </div>
-      )}
+      <div className={s.App}>
+        {dataImages.length !== 0 && <ImageGallery images={dataImages} />}
+        {status === Status.RESOLVED && <Button onClick={handleButtonClick} />})
+        {status === Status.PENDING && <Loader />}
+        {status === Status.REJECTED && errors && (
+          <p className={s.ErrorTitle}>
+            Нет картинок с названием <span>{errors.message}</span>, поробуйте
+            ввести другое название!
+          </p>
+        )}
+      </div>
     </>
   );
 }
