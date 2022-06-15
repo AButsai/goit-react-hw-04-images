@@ -5,6 +5,7 @@ import Searchbar from '../Searchbar';
 import ImageGallery from '../ImageGallery';
 import Button from '../Button';
 import Loader from '../Loader';
+import Modal from 'components/Modal/index.js';
 
 import s from './App.module.css';
 
@@ -21,6 +22,8 @@ function App() {
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState(Status.IDLE);
   const [errors, setErrors] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalImg, setModalImg] = useState({});
 
   useEffect(() => {
     if (imagesName === '') {
@@ -52,13 +55,23 @@ function App() {
     setPage(prevState => prevState + 1);
   };
 
+  const handleToggleModal = (img, tag) => {
+    setModalImg({ img, tag });
+    setShowModal(!showModal);
+  };
+
   return (
     <>
       <Searchbar onSubmit={handleSubmitForm} />
       <ToastContainer autoClose={1500} />
 
       <div className={s.App}>
-        {dataImages.length !== 0 && <ImageGallery images={dataImages} />}
+        {dataImages.length !== 0 && (
+          <ImageGallery
+            images={dataImages}
+            handleToggleModal={handleToggleModal}
+          />
+        )}
         {status === Status.RESOLVED && <Button onClick={handleButtonClick} />})
         {status === Status.PENDING && <Loader />}
         {status === Status.REJECTED && errors && (
@@ -68,6 +81,12 @@ function App() {
           </p>
         )}
       </div>
+
+      {showModal && (
+        <Modal onClose={handleToggleModal}>
+          <img src={modalImg.img} alt={modalImg.tag} />
+        </Modal>
+      )}
     </>
   );
 }

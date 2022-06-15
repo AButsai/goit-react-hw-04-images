@@ -4,7 +4,7 @@ import ImageGalleryItem from '../ImageGalleryItem';
 
 import s from './ImageGallery.module.css';
 
-const ImageGallery = ({ images, children }) => {
+const ImageGallery = ({ images, children, handleToggleModal }) => {
   return (
     <>
       <ul className={s.ImageGallery}>
@@ -15,11 +15,11 @@ const ImageGallery = ({ images, children }) => {
               webformatURL={webformatURL}
               largeImageURL={largeImageURL}
               tags={tags}
+              handleToggleModal={handleToggleModal}
             />
           ))
         )}
       </ul>
-
       {children}
     </>
   );
